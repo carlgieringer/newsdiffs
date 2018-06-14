@@ -10,6 +10,9 @@ import urllib2
 
 # This formatter is like the default but uses a period rather than a comma
 # to separate the milliseconds
+from dynamic import grab_url_dynamic
+
+
 class MyFormatter(logging.Formatter):
     def formatTime(self, record, datefmt=None):
         return logging.Formatter.formatTime(self, record,
@@ -120,6 +123,10 @@ class BaseParser(object):
                 self.real_article = False
                 return
             raise
+
+        if self._is_dynamic(self.html):
+            self.html = grab_url_dynamic(self._printableurl())
+
         logger.debug('got html')
         self._parse(self.html)
 
@@ -132,6 +139,9 @@ class BaseParser(object):
         If the article isn't valid, set self.real_article to False and return.
         """
         raise NotImplementedError()
+
+    def _is_dynamic(self, html):
+        return False
 
     def __unicode__(self):
         return canonicalize(u'\n'.join((self.date, self.title, self.byline,

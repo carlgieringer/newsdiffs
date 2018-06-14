@@ -7,3 +7,4 @@ html5lib
 python-dateutil==2.7.3
 pytest==3.5.1
 mock==2.0.0
+selenium==3.12.0

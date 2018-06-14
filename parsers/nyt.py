@@ -1,7 +1,10 @@
 import re
 
-from baseparser import BaseParser
 from bs4 import BeautifulSoup
+
+from baseparser import BaseParser
+
+
 
 
 paragraph_wrapper_re = re.compile(r'.*\bStoryBodyCompanionColumn\b.*')
@@ -45,6 +48,9 @@ class NYTParser(BaseParser):
                     'http://www.nytimes.com/pages/fashion/weddings/',
                     'http://www.nytimes.com/pages/todayspaper/',
                     'http://topics.nytimes.com/top/opinion/thepubliceditor/']
+
+    def _is_dynamic(self, html):
+        return 'data-reactroot' in html
 
     def _parse(self, html):
         soup = BeautifulSoup(html, 'html.parser')
