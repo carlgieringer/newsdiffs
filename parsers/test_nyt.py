@@ -18,4 +18,11 @@ def test_new_format(mock_grab_url):
     parser = NYTParser('https://www.nytimes.com/2018/05/16/us/politics/mueller-trump-indictment.html')
     assert 'Trump' in parser.body
     assert len(parser.body.split('\n\n')) == 28
+    assert not parser.title.endswith('- The New York Times')
 
+@patch('parsers.baseparser.grab_url')
+def test_corrections(mock_grab_url):
+    from test_nyt_data import HTML_WITH_CORRECTION
+    mock_grab_url.return_value = HTML_WITH_CORRECTION
+    parser = NYTParser('https://www.nytimes.com/2018/06/05/world/europe/greece-macedonia.html')
+    assert 'Correction:' in parser.body
