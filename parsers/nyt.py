@@ -73,9 +73,13 @@ class NYTParser(BaseParser):
             try:
                 self.date = soup.find('time').getText()
                 self.byline = soup.find('p', attrs={'itemprop': 'author creator'}).getText()
-            except:
-                self.real_article = False
-                return
+            except AttributeError:
+                try:
+                    self.date = soup.find('time').getText()
+                    self.byline = soup.find('p', attrs={'itemprop': 'author'}).getText()
+                except:
+                    self.real_article = False
+                    return
         p_tags = sum([list(soup.findAll('p', attrs=restriction))
                       for restriction in [{'itemprop': 'articleBody'},
                                           {'itemprop': 'reviewBody'},
